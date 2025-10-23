@@ -1,0 +1,8 @@
+# Railway Frontend Configuration
+# This tells Railway to use the correct Node.js version
+{
+  "engines": {
+    "node": "18.x",
+    "npm": "9.x"
+  }
+}

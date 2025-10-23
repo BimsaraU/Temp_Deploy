@@ -1,6 +1,83 @@
 # HRGSMS - Hotel Room and Guest Service Management System
 
-## Docker Setup
+## 🚀 Railway Deployment Ready!
+
+**Your MySQL database is already set up on Railway!**
+
+### ⚡ Quick Deploy (25 minutes)
+
+**👉 START HERE:** [`START_HERE.md`](START_HERE.md) - Complete deployment guide
+
+1. **Initialize Database** (5 mins)
+   ```bash
+   cd hrgsms-db
+   initialize_railway_db.bat  # Windows
+   # OR
+   ./initialize_railway_db.sh  # Linux/Mac
+   ```
+
+2. **Deploy Backend** (10 mins) - Follow [`RAILWAY_ENV_SETUP.md`](RAILWAY_ENV_SETUP.md)
+   - Root Directory: `hrgsms-backend`
+   - Add environment variables
+   - Generate domain
+
+3. **Deploy Frontend** (10 mins)
+   - Root Directory: `hrgsms-frontend`
+   - Add backend URL
+   - Generate domain
+
+---
+
+## 📚 Documentation
+
+| Document | Purpose |
+|----------|---------|
+| **[START_HERE.md](START_HERE.md)** | 👈 **Start your deployment here!** |
+| [RAILWAY_ENV_SETUP.md](RAILWAY_ENV_SETUP.md) | Your specific Railway credentials & setup |
+| [DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md) | Track deployment progress |
+| [hrgsms-db/RAILWAY_DB_INIT.md](hrgsms-db/RAILWAY_DB_INIT.md) | Database initialization guide |
+| [RAILWAY_QUICKSTART.md](RAILWAY_QUICKSTART.md) | 5-minute quick guide |
+| [RAILWAY_DEPLOYMENT.md](RAILWAY_DEPLOYMENT.md) | Comprehensive deployment docs |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | System architecture overview |
+| [RAILWAY_QUICK_REFERENCE.txt](RAILWAY_QUICK_REFERENCE.txt) | Command reference |
+
+---
+
+## 🗄️ Your Railway MySQL
+
+```
+Host:     nozomi.proxy.rlwy.net
+Port:     33570
+Database: railway
+Status:   ✅ Ready for initialization
+```
+
+---
+
+## 🏗️ Project Structure
+
+```
+HRGSMS-36/
+├── hrgsms-backend/       # FastAPI REST API
+├── hrgsms-frontend/      # Next.js React App
+├── hrgsms-db/           # Database schema & scripts
+├── START_HERE.md        # 👈 Begin deployment
+└── RAILWAY_ENV_SETUP.md # Your specific setup
+```
+
+---
+
+## 🛠️ Technology Stack
+
+- **Frontend:** Next.js 14, React 18, TypeScript, Chart.js
+- **Backend:** FastAPI, Python 3.11, Uvicorn
+- **Database:** MySQL 8.0
+- **Deployment:** Railway
+- **Authentication:** JWT
+
+---
+
+## Local Development with Docker
 
 ### Prerequisites
 - Docker Desktop installed on your system

@@ -13,5 +13,10 @@ dist/
 # env & misc
 .env
 .env.*
+.env.railway
 .DS_Store
 coverage/
+
+# Railway credentials (never commit!)
+**/RAILWAY_*.txt
+**/railway_credentials.*

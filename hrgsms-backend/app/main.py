@@ -7,11 +7,22 @@ app = FastAPI(title="HRGSMS API", version="1.0.0", description="Hotel Room and G
 
 
 # CORS configuration
+import os
 
+# Support Railway deployment and local development
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
+
+# Add Railway frontend URL if environment variable is set
+railway_frontend = os.getenv("FRONTEND_URL")
+if railway_frontend:
+    origins.append(railway_frontend)
+
+# In production, allow all origins for Railway (you can restrict this later)
+if os.getenv("APP_ENV") == "production":
+    origins.append("*")
 
 app.add_middleware(
     CORSMiddleware,

@@ -37,11 +37,10 @@ COPY --from=builder /app/.next/static ./.next/static
 # Set user
 USER nextjs
 
-# Expose port
-EXPOSE 3000
+# Expose port (Railway assigns PORT dynamically)
+EXPOSE ${PORT:-3000}
 
-ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Start the application
-CMD ["node", "server.js"]
+# Start the application - Railway uses PORT environment variable
+CMD node server.js
