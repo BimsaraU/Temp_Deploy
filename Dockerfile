@@ -1,0 +1,91 @@
+# Multi-stage Dockerfile for HRGSMS Full Stack Application
+# This Dockerfile builds both backend and frontend services
+
+# ============================================
+# Stage 1: Backend Build
+# ============================================
+FROM python:3.11-slim AS backend
+
+WORKDIR /backend
+
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy backend files
+COPY hrgsms-backend/requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+COPY hrgsms-backend/ .
+
+# Backend will run on port specified by $PORT (Railway) or 8000
+EXPOSE ${PORT:-8000}
+
+# ============================================
+# Stage 2: Frontend Build
+# ============================================
+FROM node:18-alpine AS frontend
+
+WORKDIR /frontend
+
+# Copy frontend files
+COPY hrgsms-frontend/package*.json ./
+RUN npm ci
+
+COPY hrgsms-frontend/ .
+
+# Build Next.js application
+RUN npm run build
+
+# ============================================
+# Stage 3: Production - Backend Runtime
+# ============================================
+FROM python:3.11-slim AS backend-runtime
+
+WORKDIR /app/backend
+
+# Install runtime dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy backend from build stage
+COPY --from=backend /backend /app/backend
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+EXPOSE 8000
+
+# ============================================
+# Stage 4: Production - Frontend Runtime
+# ============================================
+FROM node:18-alpine AS frontend-runtime
+
+WORKDIR /app/frontend
+
+ENV NODE_ENV=production
+
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+# Copy frontend build
+COPY --from=frontend /frontend/public ./public
+COPY --from=frontend /frontend/.next/standalone ./
+COPY --from=frontend /frontend/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+# ============================================
+# Final Stage: Choose which service to run
+# ============================================
+# Note: This Dockerfile is designed for docker-compose
+# For Railway, use the individual Dockerfiles in each service folder
+
+# Default: Run backend (you can override in docker-compose.yml)
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
