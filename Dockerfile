@@ -30,10 +30,10 @@ FROM node:18-alpine AS frontend
 
 WORKDIR /hrgsms-frontend
 
-# Copy frontend files
+# Copy package files
 COPY hrgsms-frontend/package*.json ./
 
-# Use npm install instead of npm ci (since package-lock.json might not exist)
+# Use npm install (package-lock.json might not exist)
 RUN npm install --legacy-peer-deps
 
 COPY hrgsms-frontend/ .
@@ -71,13 +71,13 @@ WORKDIR /app/frontend
 ENV NODE_ENV=production
 
 # Create non-root user
-RUN addgroup --system --gid 1001 nodejs && \RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs--uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
 # Copy frontend build
 COPY --from=frontend /hrgsms-frontend/public ./public
-COPY --from=frontend /hrgsms-frontend/.next/standalone ./COPY --from=frontend /hrgsms-frontend/.next/standalone ./
-COPY --from=frontend /hrgsms-frontend/.next/static ./.next/static=frontend /hrgsms-frontend/.next/static ./.next/static
+COPY --from=frontend /hrgsms-frontend/.next/standalone ./
+COPY --from=frontend /hrgsms-frontend/.next/static ./.next/static
 
 USER nextjs
 
@@ -86,10 +86,8 @@ EXPOSE 3000
 # ============================================
 # Final Stage: Choose which service to run
 # ============================================
-# Note: This Dockerfile is designed for docker-compose# Note: This Dockerfile is designed for docker-compose
-# For Railway, use the individual Dockerfiles in each service folderolder
+# Note: This Dockerfile is designed for docker-compose
+# For Railway, use the individual Dockerfiles in each service folder
 
-# Default: Run backend (you can override in docker-compose.yml)# Default: Run backend (you can override in docker-compose.yml)
-
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Default: Run backend (you can override in docker-compose.yml)
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
