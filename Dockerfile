@@ -83,11 +83,5 @@ USER nextjs
 
 EXPOSE 3000
 
-# ============================================
-# Final Stage: Choose which service to run
-# ============================================
-# Note: This Dockerfile is designed for docker-compose
-# For Railway, use the individual Dockerfiles in each service folder
-
-# Default: Run backend (you can override in docker-compose.yml)
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Start Next.js server
+CMD ["node", "server.js"]
